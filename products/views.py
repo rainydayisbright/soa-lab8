@@ -22,9 +22,12 @@ class ProductViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def toggle_active(self, request, pk=None):
         product = self.get_object()
+        old_status = product.is_active
         product.is_active = not product.is_active
         product.save()
+        print(f"Toggled product {product.id} from {old_status} to {product.is_active}")
         return Response({'status': 'updated', 'is_active': product.is_active})
+
 
     @action(detail=False, methods=['get'], url_path='category/(?P<category_name>[^/.]+)')
     def by_category(self, request, category_name=None):
